@@ -6,12 +6,16 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm.jsx';
 import Rank from './components/Rank/Rank.jsx';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition.jsx';
 import Particles, { ParticlesProvider } from '@tsparticles/react';
+import Signin from './components/Signin/Signin.jsx';
+import Register from './components/Register/Register.jsx';
 import { loadSlim } from '@tsparticles/slim';
 
 function App() {
     const [input, setInput] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [boxes, setBoxes] = useState([]);
+    const [route, setRoute] = useState('signin');
+    const [isSignedIn, setIsSignedIn] = useState(false);
 
     const onInputChange = (event) => {
         console.log(event.target.value);
@@ -22,6 +26,16 @@ function App() {
         console.log('click');
         setBoxes([]);
         setImageUrl(input);
+    }
+
+    const onRouteChange = (route) => {
+        if(route === 'signin') {
+            setIsSignedIn(false);
+        }
+        if(route === 'home') {
+            setIsSignedIn(true);
+        }
+        setRoute(route);
     }
 
     const createBoundingBox = (pixelBox, imageWidth, imageHeight) => {
@@ -143,14 +157,24 @@ function App() {
     <ParticlesProvider init={loadSlim}>
       <div className="App">
         <Particles className="tsparticles" id="tsparticles" options={particlesOptions} />
-
-        <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm 
-            onInputChange={onInputChange}
-            onButtonSubmit={onSubmit} 
-        />
+        <Navigation isSignedIn={isSignedIn} onRouteChange={onRouteChange}/>
+        { route === 'home' 
+            ? (
+                <>
+                    <Logo />
+                    <Rank />
+                    <ImageLinkForm 
+                        onInputChange={onInputChange}
+                        onButtonSubmit={onSubmit} 
+                    />
+                </>
+            ) 
+            
+            : (route === 'signin'
+            ? <Signin onRouteChange = {onRouteChange}/>
+            : <Register onRouteChange = {onRouteChange}/>
+            )
+        }
 
         <FaceRecognition
             imageUrl={imageUrl}
