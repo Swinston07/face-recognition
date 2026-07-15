@@ -2,7 +2,7 @@
   "name": "facerecognition",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://github.com/Swinston07/face-recognition.git",
+  "homepage": "https://swinston07.github.io/face-recognition/",
   "type": "module",
   "scripts": {
     "dev": "vite",
