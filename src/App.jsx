@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import './App.css';
 import Navigation from './components/Navigation/Navigation.jsx';
 import Logo from './components/Logo/Logo.jsx';
@@ -77,6 +77,13 @@ function App() {
                 };
             });
         };
+
+        useEffect(() => {
+            fetch('http://localhost:3000')
+            .then(response => response.json())
+            .then(console.log)
+            .catch(err => console.error(err));
+        }, []);
 
         const sendImageToHuggingFace = async () => {
             try {
