@@ -1,16 +1,16 @@
 import React from 'react';
 
-const Logo = () => {
+const Rank = ({name, entries}) => {
     return(
         <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
             <div className="white f3">
-                {'Sterling, your current rank is...'}
+                {`${name}, your current rank is...`}
             </div>
             <div className="white f1">
-                {'#5'}
+                {`#${entries}`}
             </div>
         </div>
     )
 }
 
-export default Logo;
+export default Rank;

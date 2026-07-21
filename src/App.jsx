@@ -102,6 +102,33 @@ function App() {
             .catch(err => console.error(err));
         }, []);
 
+    const updateEntries = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/image', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: user.id,
+                }),
+            });
+
+            const newEntries = await response.json();
+
+            if (!response.ok) {
+                throw new Error(newEntries || 'Could not update entries');
+            }
+
+            setUser((previousUser) => ({
+                ...previousUser,
+                entries: newEntries,
+            }));
+        } catch (error) {
+            console.error('Entries update error:', error);
+        }
+    };
+
         const sendImageToHuggingFace = async () => {
             try {
                 const imageResponse = await fetch(imageUrl);
@@ -132,6 +159,8 @@ function App() {
 
                 const detectedBoxes = calculateFaceLocations(data);
                 setBoxes(detectedBoxes);
+
+                await updateEntries();
             } catch (error) {
                 console.error(error);
                 setBoxes([]);
@@ -199,6 +228,7 @@ function App() {
             
             : (route === 'signin'
             ? <Signin
+                loadUser = {loadUser}
                 onRouteChange = {onRouteChange}
             />
             : <Register 
