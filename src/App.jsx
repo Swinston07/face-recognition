@@ -16,6 +16,13 @@ function App() {
     const [boxes, setBoxes] = useState([]);
     const [route, setRoute] = useState('signin');
     const [isSignedIn, setIsSignedIn] = useState(false);
+    const [user, setUser] = useState({
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
+    });
 
     const onInputChange = (event) => {
         console.log(event.target.value);
@@ -36,6 +43,16 @@ function App() {
             setIsSignedIn(true);
         }
         setRoute(route);
+    }
+
+    const loadUser = (data) => {
+        setUser({
+            id: data.id,
+            name: data.name,
+            email: data.email,
+            entries: data.entries,
+            joined: data.joined
+        });
     }
 
     const createBoundingBox = (pixelBox, imageWidth, imageHeight) => {
@@ -169,7 +186,10 @@ function App() {
             ? (
                 <>
                     <Logo />
-                    <Rank />
+                    <Rank 
+                        name={user.name}
+                        entries={user.entries}
+                    />
                     <ImageLinkForm 
                         onInputChange={onInputChange}
                         onButtonSubmit={onSubmit} 
@@ -178,8 +198,12 @@ function App() {
             ) 
             
             : (route === 'signin'
-            ? <Signin onRouteChange = {onRouteChange}/>
-            : <Register onRouteChange = {onRouteChange}/>
+            ? <Signin
+                onRouteChange = {onRouteChange}
+            />
+            : <Register 
+                loadUser = {loadUser}
+                onRouteChange = {onRouteChange}/>
             )
         }
 

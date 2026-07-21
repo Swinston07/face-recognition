@@ -33,6 +33,9 @@ class Signin extends React.Component {
                 }
         });
     }
+    onSelectRegister = () => {
+        this.props.onRouteChange('register');
+    }
 
     render() {
         const onRouteChange = this.props;
@@ -64,14 +67,14 @@ class Signin extends React.Component {
                         </fieldset>
                         <div className="" style={{display: 'flex', justifyContent: 'center'}}>
                             <input 
-                                onClick={this.onSubmitSignIn }
+                                onClick={this.onSubmitSignIn}
                                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" 
                                 type="submit" 
                                 value="Sign in" 
                             />
                         </div>
                         <div className="lh-copy mt3">
-                            <p onClick={() => onRouteChange('register')} className="f6 link dim black db pointer">Register</p>
+                            <p onClick={this.onSelectRegister} className="f6 link dim black db pointer">Register</p>
                         </div>
                     </div>
                 </main>
