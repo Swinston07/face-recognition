@@ -224,7 +224,7 @@ function App() {
                         onButtonSubmit={onSubmit} 
                     />
                 </>
-            ) 
+            )
             
             : (route === 'signin'
             ? <Signin
