@@ -16,13 +16,25 @@ function App() {
     const [boxes, setBoxes] = useState([]);
     const [route, setRoute] = useState('signin');
     const [isSignedIn, setIsSignedIn] = useState(false);
-    const [user, setUser] = useState({
+
+    const initialUser = {
         id: '',
         name: '',
         email: '',
         entries: 0,
         joined: ''
-    });
+    };
+
+
+    const [user, setUser] = useState(initialUser);
+
+    const resetState = () => {
+        setInput('');
+        setImageUrl('');
+        setBoxes([]);
+        setUser(initialUser);
+        setIsSignedIn(false);
+    }
 
     const onInputChange = (event) => {
         console.log(event.target.value);
@@ -37,7 +49,7 @@ function App() {
 
     const onRouteChange = (route) => {
         if(route === 'signin') {
-            setIsSignedIn(false);
+            resetState();
         }
         if(route === 'home') {
             setIsSignedIn(true);
@@ -131,29 +143,19 @@ function App() {
 
         const sendImageToHuggingFace = async () => {
             try {
-                const imageResponse = await fetch(imageUrl);
-
-                if (!imageResponse.ok) {
-                throw new Error("Could not download the image.");
-                }
-
-                const imageBlob = await imageResponse.blob();
-
-                const apiResponse = await fetch(
-                    "https://router.huggingface.co/hf-inference/models/facebook/detr-resnet-50",
-                    {
-                        method: "POST",
-                        headers: {
-                        Authorization: `Bearer ${import.meta.env.VITE_HUGGINGFACE_TOKEN}`,
-                        "Content-Type": imageBlob.type || "application/octet-stream",
-                        },
-                        body: imageBlob,
+                const response = await fetch('http://localhost:3000/imageurl', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
                     },
-                );
+                    body: JSON.stringify({
+                        imageUrl
+                    })
+                });
 
-                const data = await apiResponse.json();
+                const data = await response.json();
 
-                if (!apiResponse.ok) {
+                if (!response.ok) {
                 throw new Error(data.error || "Hugging Face request failed.");
                 }
 
